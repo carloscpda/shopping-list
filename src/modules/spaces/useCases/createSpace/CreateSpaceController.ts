@@ -12,7 +12,7 @@ export class CreateSpaceController extends BaseController {
   }
 
   async executeImpl(): Promise<any> {
-    const dto: CreateSpaceDTO = this.req.body as CreateSpaceDTO;
+    const dto: CreateSpaceDTO = { ...this.req.body, ownerId: this.req.user } as CreateSpaceDTO;
 
     try {
       const result = await this.useCase.execute(dto);

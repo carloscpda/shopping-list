@@ -43,7 +43,7 @@ export class Space extends AggregateRoot<SpaceProps> {
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
     if (!guardResult.succeeded) {
-      return Result.fail<Space>(guardResult.message);
+      return Result.fail<Space>(guardResult);
     } else {
       const space = new Space(props, id);
 

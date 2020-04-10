@@ -36,7 +36,7 @@ export class Product extends AggregateRoot<ProductProps> {
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
     if (!guardResult.succeeded) {
-      return Result.fail<Product>(guardResult.message);
+      return Result.fail<Product>(guardResult);
     } else {
       const product = new Product(props, id);
 

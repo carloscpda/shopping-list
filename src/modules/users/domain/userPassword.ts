@@ -72,7 +72,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     const propsResult = Guard.againstNullOrUndefined(props.value, 'password');
 
     if (!propsResult.succeeded) {
-      return Result.fail<UserPassword>(propsResult.message);
+      return Result.fail<UserPassword>(propsResult);
     } else {
       if (!props.hashed) {
         if (!this.isAppropriateLength(props.value)) {

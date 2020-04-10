@@ -6,16 +6,16 @@ import { UserMap } from '../../users/mappers/UserMap';
 export class SpaceMap extends Mapper<Space> {
   public static toPersistence(space: Space): any {
     return {
-      id: space.spaceId.toString(),
-      name: space.name,
-      owner_id: space.ownerId,
+      space_id: space.id.toString(),
+      space_name: space.name,
+      owner_id: space.ownerId.id.toValue().toString(),
     };
   }
 
   public static toDomain(raw: any): Space {
     const spaceOrError = Space.create(
       {
-        name: raw.name,
+        name: raw.space_name,
         ownerId: raw.owner_id,
         members: raw.members.map((m) => UserMap.toDomain(m)),
       },

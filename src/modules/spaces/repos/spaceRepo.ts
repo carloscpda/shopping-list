@@ -31,7 +31,7 @@ export class SpaceRepo implements ISpaceRepo {
 
   public async exists(spaceId: SpaceId): Promise<boolean> {
     const baseQuery = this.createBaseQuery();
-    baseQuery.where['id'] = spaceId.id.toString();
+    baseQuery.where['space_id'] = spaceId.id.toString();
     const space = await this.models.Space.findOne(baseQuery);
     return !!space;
   }

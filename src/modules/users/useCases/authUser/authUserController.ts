@@ -14,7 +14,7 @@ export class AuthUserController extends BaseController {
     if (!this.passport) throw Error('No passport instance provided');
     this.passport.authenticate(AuthService.STRATEGY_NAME, (err, user, message) => {
       if (err) return this.fail(err);
-      if (message.message) return this.fail(message.message);
+      if (message?.message) return this.fail(message.message);
 
       if (!user) {
         switch (message.constructor) {

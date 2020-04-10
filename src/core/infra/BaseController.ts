@@ -1,24 +1,26 @@
-import * as express from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 export abstract class BaseController {
   // or even private
-  protected req: express.Request;
-  protected res: express.Response;
+  protected req: Request;
+  protected res: Response;
+  protected next: NextFunction;
 
   protected abstract executeImpl(): Promise<void | any>;
 
-  public execute(req: express.Request, res: express.Response): void {
+  public execute(req: Request, res: Response, next?: NextFunction): void {
     this.req = req;
     this.res = res;
+    this.next = next;
 
     this.executeImpl();
   }
 
-  public static jsonResponse(res: express.Response, code: number, message: string) {
+  public static jsonResponse(res: Response, code: number, message: string) {
     return res.status(code).json({ message });
   }
 
-  public ok<T>(res: express.Response, dto?: T) {
+  public ok<T>(res: Response, dto?: T) {
     if (!!dto) {
       return res.status(200).json(dto);
     } else {
@@ -26,7 +28,7 @@ export abstract class BaseController {
     }
   }
 
-  public created(res: express.Response) {
+  public created(res: Response) {
     return res.sendStatus(201);
   }
 

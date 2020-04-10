@@ -24,7 +24,7 @@ export class CreateUserController extends BaseController {
           case CreateUserErrors.AccountAlreadyExists:
             return this.conflict(error.errorValue().message);
           default:
-            return this.fail(error.errorValue());
+            return this.fail(error.errorValue().message);
         }
       } else {
         return this.ok(this.res);

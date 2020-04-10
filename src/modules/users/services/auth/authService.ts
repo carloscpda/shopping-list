@@ -11,24 +11,16 @@ import { AuthUserErrors } from '../../useCases/authUser/authUserErrors';
 
 export interface IAuthService {
   init(app: any): void;
+  ensureAuthenticated();
 }
 
 export class AuthService implements IAuthService {
+  public static STRATEGY_NAME: string = 'shopphing-list-auth';
+
   private userRepo: IUserRepo;
 
   constructor(userRepo: IUserRepo) {
     this.userRepo = userRepo;
-  }
-
-  public static STRATEGY_NAME: string = 'shopphing-list-auth';
-
-  public init(app: any): void {
-    app.use(this.createSession());
-    app.use(passport.initialize());
-    app.use(passport.session());
-    passport.use(AuthService.STRATEGY_NAME, this.createStrategy());
-    passport.serializeUser(this.serializeUser);
-    passport.deserializeUser(this.deserializeUser);
   }
 
   private createSession() {
@@ -83,5 +75,25 @@ export class AuthService implements IAuthService {
 
   private deserializeUser(userId, done) {
     return done(null, userId);
+  }
+
+  public init(app: any): void {
+    app.use(this.createSession());
+    app.use(passport.initialize());
+    app.use(passport.session());
+    passport.use(AuthService.STRATEGY_NAME, this.createStrategy());
+    passport.serializeUser(this.serializeUser);
+    passport.deserializeUser(this.deserializeUser);
+  }
+
+  public ensureAuthenticated() {
+    return async (req, res, next) => {
+      const isAuthenticated = req.isAuthenticated();
+      if (!isAuthenticated) {
+        return res.status(401).send({ message: 'Unauthorized' });
+      }
+
+      return next();
+    };
   }
 }

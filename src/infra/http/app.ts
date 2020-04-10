@@ -25,15 +25,6 @@ app.use(morgan('combined'));
 // Auth
 authService.init(app);
 
-// TODO: eliminar
-app.get('/protected-route', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.send('<h1>You are authenticated</h1>');
-  } else {
-    res.send('<h1>You are not authenticated</h1>');
-  }
-});
-
 // Routes
 app.use('/api/v1', v1Router(passport));
 

@@ -27,7 +27,7 @@ export class CreateSpaceUseCase implements UseCase<CreateSpaceDTO, Promise<Respo
     let owner: User;
     let members: User[] = [];
 
-    const { name } = req;
+    const { name, memberIds = [] } = req;
 
     try {
       owner = await this.userRepo.findUserById(req.ownerId);
@@ -35,9 +35,9 @@ export class CreateSpaceUseCase implements UseCase<CreateSpaceDTO, Promise<Respo
       return left(new CreateSpaceErrors.UserDoesntExistError(req.ownerId));
     }
 
-    members = await this.userRepo.findUsersById(req.memberIds);
-    if (members.length < req.memberIds.length) {
-      req.memberIds.forEach((memberId) => {
+    members = await this.userRepo.findUsersById(memberIds);
+    if (members.length < memberIds.length) {
+      memberIds.forEach((memberId) => {
         if (!includes(members, memberId)) {
           return left(new CreateSpaceErrors.UserDoesntExistError(memberId));
         }

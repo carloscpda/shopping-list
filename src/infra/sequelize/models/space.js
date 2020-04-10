@@ -2,13 +2,13 @@ module.exports = function (sequelize, DataTypes) {
   const Space = sequelize.define(
     'space',
     {
-      id: {
+      space_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
       },
-      name: {
+      space_name: {
         type: DataTypes.STRING(250),
         allowNull: false,
       },
