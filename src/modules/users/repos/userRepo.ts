@@ -29,7 +29,7 @@ export class UserRepo implements IUserRepo {
     baseQuery.where['user_id'] = userId;
     const user = await this.models.User.findOne(baseQuery);
     if (!user) throw new Error('User not found');
-    return user;
+    return UserMap.toDomain(user);
   }
 
   public async findUsersById(userIds: string[]): Promise<User[]> {
@@ -43,8 +43,8 @@ export class UserRepo implements IUserRepo {
     const baseQuery = this.createBaseQuery();
     baseQuery.where['user_email'] = email.value.toString();
     const user = await this.models.User.findOne(baseQuery);
-    if (!!user === true) return user;
-    return null;
+    if (!user) throw new Error('User not found');
+    return UserMap.toDomain(user);
   }
 
   public async exists(email: UserEmail): Promise<boolean> {

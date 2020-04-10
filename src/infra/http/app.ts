@@ -6,6 +6,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { v1Router } from './api/v1';
 import { isProduction } from '../../config';
+import passport from 'passport';
+import { authService } from '../../modules/users/services/auth';
 
 const app = express();
 
@@ -20,12 +22,24 @@ app.use(compression());
 app.use(helmet());
 app.use(morgan('combined'));
 
-app.use('/api/v1', v1Router);
+// Auth
+authService.init(app);
 
-// New api versions can go here
+// TODO: eliminar
+app.get('/protected-route', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.send('<h1>You are authenticated</h1>');
+  } else {
+    res.send('<h1>You are not authenticated</h1>');
+  }
+});
 
+// Routes
+app.use('/api/v1', v1Router(passport));
+
+// Port
 app.listen(process.env.PORT || 9044, () => {
   console.log(`[App]: Server listening on 9044`);
 });
 
-export { app };
+export { app, passport };
